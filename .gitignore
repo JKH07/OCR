@@ -1,4 +1,5 @@
 # Ignore the environment folder
 .env
+OCR.venv/
 __pycache__/
 *.pyc
