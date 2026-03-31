@@ -1,6 +1,7 @@
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
 import os
+import uvicorn
 app = FastAPI()
 
 @app.post("/upload-image")
@@ -15,9 +16,7 @@ async def receive_image(file: UploadFile = File(...)):
     # logging
     print(f"Received {file.filename} which is {len(image_data)} bytes.")
 
-    # --- YOUR OCR LOGIC GOES HERE ---
-    # text_result = my_ocr_function(image_data)
-    # --------------------------------
+    # ocr
 
     return {
         "message": "Image received successfully",
@@ -26,6 +25,6 @@ async def receive_image(file: UploadFile = File(...)):
     }
 
 if __name__ == "__main__":
-    import uvicorn
+    
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
