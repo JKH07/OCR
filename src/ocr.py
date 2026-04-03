@@ -30,7 +30,6 @@ data_form = {
         "overdose": {"type": "INTEGER"},
         "side_effects": {"type": "ARRAY", "items": {"type": "STRING"}},
         "not_suitable_for": {"type": "STRING"},
-        "nhs_link": {"type": "STRING"},
     },
     "required": ["name"] 
 }
@@ -43,7 +42,7 @@ def perform_OCR(image_path):
   client=client_creation()
   image = PIL.Image.open(image_path)
   response = client.models.generate_content(
-      model="gemini-2.5-flash", 
+      model="gemini-2.5-flash-lite", 
       contents=[prompt, image],
       config=types.GenerateContentConfig(
           response_mime_type="application/json",
@@ -54,5 +53,3 @@ def perform_OCR(image_path):
   data = response.parsed 
   return data
 
-dataa=perform_OCR("meds\med_5.jpg")
-print(dataa)

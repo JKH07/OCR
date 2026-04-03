@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 def validate(medication_name):
     #build url
-    api_query = f'https://api.fda.gov/drug/label.json?search=openfda.brand_name.exact="{medication_name}"&limit=1'
+    api_query = f'https://api.fda.gov/drug/label.json?search=openfda.brand_name="{medication_name}"&limit=1'
     
     logger.debug("\t API query: %s", api_query)
 
@@ -29,5 +29,5 @@ def validate(medication_name):
     return medication_name_valid
 
 
-tt=validate("Hexlophinal")
+tt=validate("CALCIUM CARBONATE")
 print(tt)

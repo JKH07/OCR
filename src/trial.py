@@ -1,9 +1,9 @@
 from datetime import date
 from save_to_data_base import insert_medication
-
+from validation import validate
 # Preparing data
 new_entry = {
-    "name": "Paracetamol",
+    "name": "Atenolol",
     "instructions_of_use": "Take with water after food.",
     "number_of_tablets": 32,
     "expiry": str(date(2027, 12, 1)),
@@ -17,7 +17,9 @@ new_entry = {
 }
 
 # Call the function
-result = insert_medication(new_entry)
+result=False
+if(validate(new_entry['name'])):
+    result = insert_medication(new_entry)
 
 if result:
     print("Success!")
