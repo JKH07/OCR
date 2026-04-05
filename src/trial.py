@@ -13,7 +13,7 @@ new_entry = {
     "side_effects": ["Nausea", "Rash", "Dizziness"],
     "not_suitable_for": "0-12",
     "nhs_link": "https://www.nhs.uk/medicines/paracetamol-for-adults/",
-    "raw_match": [{"source": "pharmacy_v1", "score": 0.98}] 
+    
 }
 
 # Call the function
