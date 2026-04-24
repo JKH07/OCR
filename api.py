@@ -5,25 +5,38 @@ import uvicorn
 from main import main
 app = FastAPI()
 
+from fastapi import FastAPI, File, UploadFile, HTTPException, Header
+from typing import Optional
+import os
+import uvicorn
+from main import main
+
+app = FastAPI()
+
 @app.post("/upload-image")
-async def receive_image(file: UploadFile = File(...)):
-    # check if image
+async def receive_image(
+    file: UploadFile = File(...), 
+    authorization: Optional[str] = Header(None) # capture JWT
+):
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
 
-    # Read the image into memory as bytes
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid Authorization header")
+
+    token = authorization.split(" ")[1]
+
     image_data = await file.read()
 
-    # logging
-    print(f"Received {file.filename} which is {len(image_data)} bytes.")
-
-    # ocr
-    main(image_data)
+    try:
+        result = main(image_data, token)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
     return {
-        "message": "Image received successfully",
+        "message": "Image processed",
         "filename": file.filename,
-        "ocr_preview": "OCR processing would happen here"
+        "status": "success"
     }
 
 if __name__ == "__main__":

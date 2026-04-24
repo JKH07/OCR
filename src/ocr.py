@@ -22,19 +22,15 @@ data_form = {
     "type": "OBJECT",
     "properties": {
         "name": {"type": "STRING"},
-        "instructions_of_use": {"type": "STRING"},
-        "number_of_tablets": {"type": "INTEGER"},
-        "expiry": {"type": "STRING"},
-        "illness": {"type": "STRING"},
-        "food_interactions": {"type": "STRING"},
-        "overdose": {"type": "INTEGER"},
-        "side_effects": {"type": "ARRAY", "items": {"type": "STRING"}},
-        "not_suitable_for": {"type": "STRING"},
+        "active ingredient":{"type":"STRING"},
+        "overdose":{"type":"STRING"},
+        "instructions_of_use":{"type":"STRING"},
+        "warnings":{"type":"STRING"},
     },
     "required": ["name"] 
 }
 #nlp prompt
-prompt = "Extract medication details from this image. If a value is not found, " \
+prompt = "Extract medication details from this image. . Make sure this information is logical and not repetitive. If a value is not found, " \
 "leave it as an empty string or 0 as per the type."
 
 #return image contents and classify 
