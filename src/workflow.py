@@ -5,10 +5,10 @@ from validation import validate
 def pipeline(image):
     data=ocr_exctraction(image)
     if(data):
-        print(data['name'])
-        if(validate_medication(data['name'])==True):
-            #data_filled=fill_rest_of_data(data)
-            save(data)
+        
+        send=validate_medication(data)
+        if(send):
+            save(send)
         else:
             print ("invalid medication.")
     
@@ -31,11 +31,10 @@ def validate_medication(drug_name):
     except Exception as err:
         print(err)
 
-def fill_rest_of_data():
-    return
+
 # save initial info to database
 def save(data:dict):
     #try exc block inside
     insert_medication(data)
 
-#pipeline("meds\med_12.jpg")
+pipeline("meds\med_12.jpg")

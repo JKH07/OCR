@@ -22,15 +22,16 @@ data_form = {
     "type": "OBJECT",
     "properties": {
         "name": {"type": "STRING"},
-        "active ingredient":{"type":"STRING"},
+        "active_ingredient":{"type":"STRING"},
         "overdose":{"type":"STRING"},
         "instructions_of_use":{"type":"STRING"},
         "warnings":{"type":"STRING"},
+        "stop_use":{"type":"STRING"}
     },
     "required": ["name"] 
 }
 #nlp prompt
-prompt = "Extract medication details from this image. . Make sure this information is logical and not repetitive. If a value is not found, " \
+prompt = "Extract name only. The name has no numbers or units. Then fill other data. If a value is not found, " \
 "leave it as an empty string or 0 as per the type."
 
 #return image contents and classify 
