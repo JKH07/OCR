@@ -4,7 +4,7 @@ import os
 import uvicorn
 from process import processor
 app = FastAPI()
-
+import tempfile
 from fastapi import FastAPI, File, UploadFile, HTTPException, Header
 from typing import Optional
 import os
@@ -26,12 +26,17 @@ async def receive_image(
 
     # token = authorization.split(" ")[1]
 
-    image_data = await file.read()
+    image_bytes = await file.read()
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
+        tmp.write(image_bytes)
+        tmp_path = tmp.name
 
     try:
-        result = processor(image_data)
+        result = processor(tmp_path)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(500, str(e))
+
 
     return {
         "message": "Image processed",
