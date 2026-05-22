@@ -9,13 +9,13 @@ from validation import validate
 from save_to_data_base import insert_medication
 
 data={
-    "name": "lisinopril",
+    "name": "zestoretic",
         "instructions_of_use":{"type":"STRING"},
         "warnings":{"type":"STRING"},
         "overdose":{"type":"STRING"},
 }
 
 
-tt=validate(data)
-print(tt)
-insert_medication(tt)
+# tt=validate(data)
+# print(tt)
+# insert_medication(tt)

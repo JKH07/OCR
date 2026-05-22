@@ -49,37 +49,53 @@ def validate(medication_data):
 
 import requests
 
+import re
+import urllib.request
+import urllib.parse
+import json
+
+import re
+
 def get_active_ingredients(drug_name: str) -> list[str]:
     try:
-        #Get RXCUI from drug name
-        rxcui_res = requests.get(
-            "https://rxnav.nlm.nih.gov/REST/rxcui.json",
-            params={"name": drug_name}
-        )
-        rxcui_res.raise_for_status()
-        rxcui_data = rxcui_res.json()
+        # drugs.json
+        res = requests.get("https://rxnav.nlm.nih.gov/REST/drugs.json", params={"name": drug_name})
+        res.raise_for_status()
+        data = res.json()
 
-        rxcui_list = rxcui_data.get("idGroup", {}).get("rxnormId")
-        if not rxcui_list:
+        rxcui = None
+        first_name = None
+        for group in data.get("drugGroup", {}).get("conceptGroup", []):
+            props = group.get("conceptProperties", [])
+            if props:
+                rxcui = props[0]["rxcui"]
+                first_name = props[0]["name"] 
+                break
+
+        if not rxcui:
             print(f"No RXCUI found for: {drug_name}")
             return []
 
-        rxcui = rxcui_list[0]
-
-        # Get ingredients using RXCUI
-        ingredients_res = requests.get(
-            f"https://rxnav.nlm.nih.gov/REST/rxcui/{rxcui}/related.json",
-            params={"rela": "has_ingredient"}
-        )
+        # Try allrelated.json with tty=IN
+        ingredients_res = requests.get(f"https://rxnav.nlm.nih.gov/REST/rxcui/{rxcui}/allrelated.json")
         ingredients_res.raise_for_status()
         ingredients_data = ingredients_res.json()
 
-        concept_groups = ingredients_data.get("relatedGroup", {}).get("conceptGroup", [])
+        concept_groups = ingredients_data.get("allRelatedGroup", {}).get("conceptGroup", [])
         ingredients = [
             prop["name"].lower()
             for group in concept_groups
+            if group.get("tty") == "IN"
             for prop in group.get("conceptProperties", [])
         ]
+
+        # parse ingredient names from the drug name string
+        if not ingredients and first_name:
+            raw = re.sub(r'\[.*?\]', '', first_name)
+            raw = re.sub(r'\b\d+(\.\d+)?\s*(MG|ML|MCG|%)\b', '', raw, flags=re.IGNORECASE)
+            raw = re.sub(r'\b(oral|tablet|capsule|solution|suspension|extended|release|chewable|powder)\b', '', raw, flags=re.IGNORECASE)
+            parts = [p.strip().lower() for p in raw.split('/') if p.strip()]
+            ingredients = [p for p in parts if p]
 
         if not ingredients:
             print(f"No ingredients found for: {drug_name}")
@@ -94,4 +110,17 @@ def get_active_ingredients(drug_name: str) -> list[str]:
         print(f"Unexpected error: {e}")
         return []
     
-get_active_ingredients("panadol")
+# test_drugs = [
+#     "tylenol",
+#     "lisinopril",
+#     "metformin",
+#     "percocet",
+#     "augmentin",
+#     "zestoretic",
+#     "panadol"
+
+# ]
+
+# for drug in test_drugs:
+#     result = get_active_ingredients(drug)
+#     print(f"{drug}: {result}")
