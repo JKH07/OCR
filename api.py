@@ -29,7 +29,7 @@ async def receive_image(
     image_data = await file.read()
 
     try:
-        result = main(image_data, token)
+        result = process(image_data, token)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
