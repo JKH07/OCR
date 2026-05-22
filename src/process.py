@@ -1,6 +1,6 @@
 from workflow import pipeline
 
-def main(data):
+def processor(data):
     try:
         pipeline(data)
         print("Success! Saved.")

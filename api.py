@@ -2,14 +2,14 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 import os
 import uvicorn
-from main import main
+from process import main
 app = FastAPI()
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, Header
 from typing import Optional
 import os
 import uvicorn
-from main import main
+from process import processor
 
 app = FastAPI()
 
