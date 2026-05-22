@@ -1,4 +1,4 @@
-from workflow import pipeline
+from src.workflow import pipeline
 
 def processor(data):
     try:

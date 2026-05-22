@@ -1,6 +1,6 @@
-from ocr import perform_OCR
-from save_to_data_base import insert_medication
-from validation import validate
+from src.ocr import perform_OCR
+from src.save_to_data_base import insert_medication
+from src.validation import validate
 
 def pipeline(image):
     data=ocr_exctraction(image)
