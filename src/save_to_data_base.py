@@ -14,24 +14,19 @@ def get_supabase_client() -> Client:
         raise ValueError("Supabase credentials not found in environment variables.")
     return create_client(url, key)
 
-
-def active_ingredient_id(text):
-    #get name only
-  
-    pattern = r'([A-Z][a-zA-Z\s]+(?:HCl|HBr|Na|Mg)?)\s+(\d+(?:\.\d+)?\s*mg)'
-    matches = re.findall(pattern, text)
-
-    ingredients = [{"name": m[0].strip(), "dose": m[1].strip()} for m in matches]
-    print(ingredients)
-    print(ingredients[0]['name'])
-    name=ingredients[0]['name']
+def active_ingredient_id(name):
+   
     supabase = get_supabase_client()
 
     try:
         result = supabase.table("active_ingredients") \
-        .select("id") \
-        .eq("name", name) \
-        .execute()
+            .select("id") \
+            .ilike("name", name) \
+            .execute()
+
+        if not result.data:
+            print(f"Ingredient not found: {name}")
+            return None
 
         print(result.data[0]['id'])
         return result.data[0]['id']
@@ -41,15 +36,12 @@ def active_ingredient_id(text):
         print(f"An unexpected error occurred: {e}")
 
 
-def insert_medication(data: dict):
-    print(data['active_ingredient'])
-    ing_id=active_ingredient_id(data['active_ingredient'])
-    data['active_ingredient']=ing_id
+def insert_medication(data: dict,data2:dict):
     supabase = get_supabase_client()
     
     try:
         response = supabase.table("medication").insert(data).execute()
-        
+        response2=supabase.table("medication_active").insert(data2).execute()
         print("Data sent successfully.")
         return response
 

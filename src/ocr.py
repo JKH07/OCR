@@ -22,11 +22,8 @@ data_form = {
     "type": "OBJECT",
     "properties": {
         "name": {"type": "STRING"},
-        "active_ingredient":{"type":"STRING"},
-        "overdose":{"type":"STRING"},
         "instructions_of_use":{"type":"STRING"},
         "warnings":{"type":"STRING"},
-        "stop_use":{"type":"STRING"}
     },
     "required": ["name"] 
 }
@@ -39,7 +36,7 @@ def perform_OCR(image_path):
   client=client_creation()
   image = PIL.Image.open(image_path)
   response = client.models.generate_content(
-      model="gemini-2.5-flash-lite", 
+      model="gemini-2.5-flash", 
       contents=[prompt, image],
       config=types.GenerateContentConfig(
           response_mime_type="application/json",

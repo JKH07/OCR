@@ -9,12 +9,10 @@ from validation import validate
 from save_to_data_base import insert_medication
 
 data={
-    "name": "panadol",
-        "active_ingredient":{"type":"STRING"},
-        "overdose":{"type":"STRING"},
+    "name": "lisinopril",
         "instructions_of_use":{"type":"STRING"},
         "warnings":{"type":"STRING"},
-        "stop_use":{"type":"STRING"}
+        "overdose":{"type":"STRING"},
 }
 
 
