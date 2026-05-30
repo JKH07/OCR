@@ -6,8 +6,19 @@ import uvicorn
 from process import processor
 from src.save_to_data_base import insert_medication
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
+# 🔴 ADD THIS BLOCK TO FIX THE "FAILED TO FETCH" BROWSER ERROR
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows your local Flutter web app to talk to the server
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows POST, GET, etc.
+    allow_headers=["*"],  # Allows all headers
+)
 @app.post("/upload-image")
 async def receive_image(
     file: UploadFile = File(...),
