@@ -57,7 +57,7 @@ def insert_medication(data: dict):
         supabase.table("medication_active").insert(junction_rows, returning="minimal").execute()
 
         print("Data sent successfully.")
-        
+        return medication_id
 
     except PostgrestAPIError as e:
         print(f"Database API error: {e.message}")
