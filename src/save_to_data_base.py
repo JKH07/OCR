@@ -45,7 +45,7 @@ def insert_medication(data: dict):
     try:
         # Insert medication and grab the new ID
         response = supabase.table("medication").insert(data).execute()
-        medication_id = response.data[0]['id']
+        medication_id = response.data[0]['med_id']
 
         # Build junction rows
         junction_rows = [
